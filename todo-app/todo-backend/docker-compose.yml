@@ -1,0 +1,6 @@
+services:
+  todo-backend:
+    image: hello-world-starter
+    build: .
+    ports:
+      - 3000:3000
