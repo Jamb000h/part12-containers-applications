@@ -1,0 +1,34 @@
+services:
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: ruokataisto-reverse-proxy
+    depends_on:
+      - ruokataisto-frontend
+      - ruokataisto-backend
+  ruokataisto-backend:
+    image: ruokataisto-backend-dev
+    build:
+      context: ./ruokataisto-backend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3001:3001
+    volumes:
+      - ./ruokataisto-backend/:/usr/src/app
+    container_name: ruokataisto-backend-dev
+
+  ruokataisto-frontend:
+    image: ruokataisto-frontend-dev
+    build:
+      context: ./ruokataisto-frontend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./ruokataisto-frontend/:/usr/src/app
+    container_name: ruokataisto-frontend-dev
+    depends_on:
+      - ruokataisto-backend
